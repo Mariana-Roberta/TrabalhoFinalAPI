@@ -23,33 +23,6 @@
 hs_err_pid*
 replay_pid*
 
-# Angular
-frontend/node_modules/
-frontend/dist/
-frontend/.angular/
-frontend/.angular-cache/
-frontend/out-tsc/
-frontend/.vscode/
-frontend/.env
-
-# Spring Boot
-backend/target/
-backend/.idea/
-backend/.vscode/
-backend/logs/
-backend/*.log
-backend/application.yml
-backend/application.properties
-
-# Global
-.DS_Store
-Thumbs.db
-*.iml
-*.class
-*.jar
-*.war
-*.swp
-
 # Java
 *.class
 *.jar

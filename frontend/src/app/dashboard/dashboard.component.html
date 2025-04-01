@@ -1,0 +1,16 @@
+<p>dashboard works!</p>
+
+
+<h3>Distribuição de Sentimentos</h3>
+<div *ngIf="loadingSentiment">Carregando...</div>
+<canvas *ngIf="!loadingSentiment" baseChart [data]="sentimentChart" [type]="'bar'"></canvas>
+
+<h3>Distribuição por Gênero</h3>
+<div *ngIf="loadingGenre">Carregando...</div>
+<canvas *ngIf="!loadingGenre" baseChart [data]="genreChart" [type]="'pie'"></canvas>
+
+<h3>TomatoMeter vs AudienceScore</h3>
+<div *ngIf="loadingComparison">Carregando...</div>
+<canvas *ngIf="!loadingComparison" baseChart [data]="comparisonChart" [type]="'bar'"></canvas>
+
+
