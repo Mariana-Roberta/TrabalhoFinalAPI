@@ -12,5 +12,8 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends MongoRepository<Review, String> {
     Page<Review> findAll(Pageable pageable);
-    List<Review> findByIsTopCritic();
+
+    Page<Review> findByIsTopCriticTrue(Pageable pageable);
+
+    long countByIsTopCriticTrue();
 }
