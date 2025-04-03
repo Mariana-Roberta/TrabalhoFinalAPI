@@ -51,21 +51,25 @@
 
 .charts-container {
   display: flex;
-  justify-content: space-around; /* Distribui os gráficos */
-  flex-wrap: wrap; /* Permite quebra em telas menores */
-  gap: 70px; /* Espaço entre os gráficos */
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 70px;
   margin-bottom: 70px;
 }
 
 .chart-container {
-  flex: 1;
-  min-width: 300px; /* Define um tamanho mínimo */
-  text-align: center;
+  flex: 1 1 30%;
+  min-width: 300px;
+  text-align: left;
+}
+
+.chart-container h3 {
+  width: 100%;
 }
 
 .chart-wrapper {
-  width: 400px;  /* Defina a largura desejada */
-  height: 400px; /* Defina a altura desejada */
+  width: 400px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,22 +79,25 @@
 }
 
 .chart-wrapper canvas {
-  width: 100%;  /* Defina a largura desejada */
+  width: 100%;
   height: auto;
 }
 
-/* Estilo geral da tabela */
+/* Tabela de Reviews */
 .table {
   margin-top: 80px;
+  text-align: center;
 }
 
 .review-table {
-  width: 700px;
-  border-collapse: separate; /* Permite border-radius nas células */
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  border-collapse: separate;
   border-spacing: 0;
   font-family: Arial, sans-serif;
   border-radius: 10px;
-  overflow: hidden; /* Mantém as bordas arredondadas */
+  overflow: hidden;
 }
 
 .review-table th, .review-table td {
@@ -112,11 +119,3 @@
 .review-table tr:hover {
   background-color: #ddd;
 }
-
-.chart-container {
-  width: 400px;
-  height: 400px;
-  margin: auto;
-}
-
-

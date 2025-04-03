@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -84,13 +86,50 @@ public class ReviewService {
         );
     }
 
-    public Map<String, Object> getStatistics() {
-        long totalReviews = reviewRepository.count();
-        long topCriticReviews = reviewRepository.countByIsTopCriticTrue();
+    public List<Map<String, Object>> getScoreEvolution(int page, int size) {
+        List<Review> reviews = reviewRepository.findAll(PageRequest.of(page, size)).getContent();
 
-        return Map.of(
-                "totalReviews", totalReviews,
-                "topCriticReviews", topCriticReviews
-        );
+        return reviews.stream()
+                .filter(r ->
+                        r.getReleaseDateTheaters() != null &&
+                                r.getAudienceScore() != null &&
+                                !r.getAudienceScore().isNaN() &&
+                                r.getTomatoMeter() != null
+                )
+                .sorted(Comparator.comparing(Review::getReleaseDateTheaters))
+                .map(r -> {
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("date", r.getReleaseDateTheaters());
+                    result.put("audienceScore", r.getAudienceScore());
+                    result.put("tomatoMeter", r.getTomatoMeter());
+                    return result;
+                })
+                .collect(Collectors.toList());
     }
+
+    public List<Map<String, Object>> getRuntimeDistribution(int page, int size, int bucketSize) {
+        List<Review> reviews = reviewRepository.findAll(PageRequest.of(page, size)).getContent();
+
+        Map<String, Long> grouped = reviews.stream()
+                .filter(r -> r.getRuntimeMinutes() != null && r.getRuntimeMinutes() > 0)
+                .collect(Collectors.groupingBy(
+                        r -> {
+                            int bucket = r.getRuntimeMinutes() / bucketSize;
+                            int start = bucket * bucketSize;
+                            int end = start + bucketSize - 1;
+                            return start + "-" + end + " min";
+                        },
+                        Collectors.counting()
+                ));
+
+        return grouped.entrySet().stream()
+                .map(entry -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("range", entry.getKey());
+                    map.put("count", entry.getValue());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
 }

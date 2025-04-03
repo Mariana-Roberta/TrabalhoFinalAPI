@@ -51,8 +51,20 @@ export class ReviewService {
     );
   }
 
-
-  getReviewStatistics(): Observable<{ [key: string]: any }> {
-    return this.http.get<{ [key: string]: any }>(`${this.apiUrl}/statistics`);
+  getScoreEvolution(page: number = 0, size: number = 10): Observable<{ date: string, audienceScore: number, tomatoMeter: number }[]> {
+    return this.http.get<{ date: string, audienceScore: number, tomatoMeter: number }[]>(
+      `${this.apiUrl}/score-evolution?page=${page}&size=${size}`
+    );
   }
+
+  getRuntimeDistribution(
+    page: number = 0,
+    size: number = 10,
+    bucketSize: number = 30
+  ): Observable<{ range: string; count: number }[]> {
+    return this.http.get<{ range: string; count: number }[]>(
+      `${this.apiUrl}/runtime-distribution?page=${page}&size=${size}&bucketSize=${bucketSize}`
+    );
+  }
+
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,12 +51,12 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getFilteredReviews(title, criticName, genre, isTopCritic, page, size));
     }
 
-    @Operation(summary = "Críticas de top críticos paginadas")
-    @GetMapping("/top-critics")
-    public ResponseEntity<Page<Review>> getTopCriticsReviews(
+    @Operation(summary = "Evolução dos scores ao longo do tempo paginada")
+    @GetMapping("/score-evolution")
+    public ResponseEntity<List<Map<String, Object>>> getScoreEvolution(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(reviewService.getTopCriticsReviews(page, size));
+        return ResponseEntity.ok(reviewService.getScoreEvolution(page, size));
     }
 
     @Operation(summary = "Distribuição de sentimentos")
@@ -80,6 +81,15 @@ public class ReviewController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(reviewService.getScoreComparison(page, size));
+    }
+
+    @GetMapping("/runtime-distribution")
+    public List<Map<String, Object>> getRuntimeDistribution(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "30") int bucketSize
+    ) {
+        return reviewService.getRuntimeDistribution(page, size, bucketSize);
     }
 
 }

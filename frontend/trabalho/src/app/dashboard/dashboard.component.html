@@ -1,26 +1,26 @@
 <div style="background-color: #f4f3ee; padding: 20px">
-<div class="pagination-container">
-  <h2>Gráficos para Análise - Trabalho Final Big Data</h2>
-  <p>Grupo: Mariana Roberta, Ottony Kazumi, Paulo Vitor</p>
-  <p class="page-info">Página {{ currentPage }}</p>
+  <div class="pagination-container">
+    <h2>Gráficos para Análise - Trabalho Final Big Data</h2>
+    <p>Grupo: Mariana Roberta, Ottony Kazumi, Paulo Vitor</p>
+    <p class="page-info">Página {{ currentPage + 1 }}</p>
 
-  <div class="button-container">
-    <button (click)="prevPage()" [disabled]="currentPage === 0" class="pagination-button">Anterior</button>
-    <button (click)="nextPage()" class="pagination-button">Próximo</button>
+    <div class="button-container">
+      <button (click)="prevPage()" [disabled]="currentPage === 0" class="pagination-button">Anterior</button>
+      <button (click)="nextPage()" class="pagination-button">Próximo</button>
+    </div>
+
+    <div class="page-size-container">
+      <label for="pageSize">Itens por página:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="loadGenreChart(0, pageSize)" class="page-size-select">
+        <option [value]="10">10</option>
+        <option [value]="50">50</option>
+        <option [value]="200">200</option>
+      </select>
+    </div>
   </div>
 
-  <div class="page-size-container">
-    <label for="pageSize">Itens por página:</label>
-    <select id="pageSize" [(ngModel)]="pageSize" (change)="loadGenreChart(0, pageSize)" class="page-size-select">
-      <option [value]="10">10</option>
-      <option [value]="50">50</option>
-      <option [value]="200">200</option>
-    </select>
-  </div>
-</div>
-
-<div class="charts-container" style="margin-top: 40px">
-  <div class="charts-container">
+  <div class="charts-container" style="margin-top: 40px">
+    <!-- Distribuição de Gêneros -->
     <div class="chart-container">
       <h3>Distribuição de Gêneros</h3>
       <div *ngIf="loadingGenre; else genreChartTemplate">
@@ -33,6 +33,7 @@
       </ng-template>
     </div>
 
+    <!-- Comparação de Notas -->
     <div class="chart-container">
       <h3>Comparação de Notas</h3>
       <div *ngIf="loadingScore; else scoreChartTemplate">
@@ -45,6 +46,7 @@
       </ng-template>
     </div>
 
+    <!-- Distribuição de Sentimentos -->
     <div class="chart-container">
       <h3>Distribuição de Sentimentos</h3>
       <div *ngIf="loadingSentiment; else sentimentChartTemplate">
@@ -56,35 +58,47 @@
         </div>
       </ng-template>
     </div>
+
+    <!-- Distribuição por Duração dos Filmes -->
+    <div class="chart-container">
+      <h3>Distribuição por Duração dos Filmes</h3>
+      <div *ngIf="loadingRuntime; else runtimeChartTemplate">
+        <p>Carregando...</p>
+      </div>
+      <ng-template #runtimeChartTemplate>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="runtimeChart" [type]="'bar'"></canvas>
+        </div>
+      </ng-template>
+    </div>
   </div>
 
-</div>
-
-<div class="table">
-  <h2>Tabela Geral de Reviews</h2>
-  <table class="review-table">
-    <thead>
-    <tr>
-      <th>Título</th>
-      <th>Crítico</th>
-      <th>Gênero</th>
-      <th>Idioma</th>
-      <th>Sentimento</th>
-      <th>Nota</th>
-      <th>Dsitribuidor</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let review of reviews">
-      <td>{{ review.title }}</td>
-      <td>{{ review.criticName }}</td>
-      <td>{{ review.genre }}</td>
-      <td>{{ review.originalLanguage }}</td>
-      <td>{{ review.scoreSentiment }}</td>
-      <td>{{ review.originalScore }}</td>
-      <td>{{ review.distributor }}</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+  <!-- Tabela de Reviews -->
+  <div class="table">
+    <h2>Tabela Geral de Reviews</h2>
+    <table class="review-table">
+      <thead>
+      <tr>
+        <th>Título</th>
+        <th>Crítico</th>
+        <th>Gênero</th>
+        <th>Idioma</th>
+        <th>Sentimento</th>
+        <th>Nota</th>
+        <th>Distribuidor</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let review of reviews">
+        <td>{{ review.title }}</td>
+        <td>{{ review.criticName }}</td>
+        <td>{{ review.genre }}</td>
+        <td>{{ review.originalLanguage }}</td>
+        <td>{{ review.scoreSentiment }}</td>
+        <td>{{ review.originalScore }}</td>
+        <td>{{ review.distributor }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

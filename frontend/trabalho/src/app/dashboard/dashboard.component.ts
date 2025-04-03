@@ -27,6 +27,11 @@ export class DashboardComponent implements OnInit {
   sentimentChart: ChartData<'bar', number[], string> = { labels: [], datasets: [] };
   loadingSentiment = true;
 
+  runtimeChart: ChartData<'bar', number[], string> = { labels: [], datasets: [] };
+  loadingRuntime = true;
+
+  runtimeBucketSize = 30;
+
 
   currentPage = 0; // Página inicial
   pageSize = 10; // Tamanho da página
@@ -40,6 +45,7 @@ export class DashboardComponent implements OnInit {
     this.loadReviews();
     this.loadScoreChart();
     this.loadSentimentChart();
+    this.loadRuntimeChart();
   }
 
   loadGenreChart(number: number, pageSize: number) {
@@ -103,12 +109,36 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  loadRuntimeChart(): void {
+    this.loadingRuntime = true;
+
+    this.reviewService.getRuntimeDistribution(this.currentPage, this.pageSize, this.runtimeBucketSize)
+      .subscribe(data => {
+        this.runtimeChart = {
+          labels: data.map(item => item.range),
+          datasets: [
+            {
+              label: 'Quantidade de Filmes',
+              data: data.map(item => item.count),
+              backgroundColor: '#3a0ca3'
+            }
+          ]
+        };
+        this.loadingRuntime = false;
+      }, error => {
+        console.error('Erro ao carregar gráfico de duração dos filmes:', error);
+        this.loadingRuntime = false;
+      });
+  }
+
+
   nextPage() {
     this.currentPage++;
     this.loadGenreChart(0, this.pageSize);
     this.loadReviews();
     this.loadScoreChart();
     this.loadSentimentChart();
+    this.loadRuntimeChart();
   }
 
   prevPage() {
@@ -118,6 +148,7 @@ export class DashboardComponent implements OnInit {
       this.loadReviews();
       this.loadScoreChart();
       this.loadSentimentChart();
+      this.loadRuntimeChart();
     }
   }
 
